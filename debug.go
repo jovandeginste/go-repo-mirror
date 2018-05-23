@@ -4,15 +4,15 @@ import "log"
 
 var loggers []*log.Logger
 
-func logIt(v ...interface{}) {
-	if *verbose {
+func logIt(level int, v ...interface{}) {
+	if level < *verbose {
 		for _, l := range loggers {
 			l.Println(v...)
 		}
 	}
 }
-func logItf(format string, v ...interface{}) {
-	if *verbose {
+func logItf(level int, format string, v ...interface{}) {
+	if level < *verbose {
 		for _, l := range loggers {
 			l.Printf(format, v...)
 		}

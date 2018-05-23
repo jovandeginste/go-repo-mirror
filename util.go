@@ -146,7 +146,7 @@ func writeURLToFile(source string, destination string) {
 
 	n, err := io.Copy(file, resp.Body)
 
-	logItf("We wrote %d bytes from '%s' to '%s'", n, source, destination)
+	logItf(2, "We wrote %d bytes from '%s' to '%s'", n, source, destination)
 }
 
 func sizeForFile(filepath string) int64 {

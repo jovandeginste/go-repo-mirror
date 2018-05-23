@@ -93,7 +93,7 @@ func (r *RepoMetadata) FetchPackages() []*RepoPackage {
 		p.Origin = r.Origin
 		p.Destination = r.Destination
 	}
-	logItf("We have %d packages.", len(meta.Package))
+	logItf(1, "We have %d packages.", len(meta.Package))
 
 	return meta.Package
 }
@@ -174,10 +174,10 @@ func (r *RepoMetadata) MirrorPackages(sizeCheck bool, concurrent int) {
 		<-resultChan
 		results++
 		if results%1000 == 0 {
-			logItf("Received packages: %d/%d", results, totalPackages)
+			logItf(2, "Received packages: %d/%d", results, totalPackages)
 		}
 	}
-	logItf("Received: %d/%d", results, totalPackages)
+	logItf(1, "Received: %d/%d", results, totalPackages)
 	close(resultChan)
 }
 

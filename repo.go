@@ -19,7 +19,7 @@ type mirrorAction struct {
 func RepositoryMirror(repoURL string, destination string) *RepoMetadata {
 	repomd := RepoMetadata{Origin: repoURL, Destination: destination}
 	url := repomd.RepomdURL()
-	logIt("Fetching repomd url '" + url + "'")
+	logIt(1, "Fetching repomd url '"+url+"'")
 	result := getURL(url)
 
 	err := xml.Unmarshal(result, &repomd)
@@ -37,7 +37,7 @@ func (r *mirrorAction) mirrorCond(sizeCheck bool) bool {
 	if r.verify(sizeCheck) {
 		return true
 	}
-	logIt("We don't have the correct version of '" + r.Name + "'. Downloading it...")
+	logIt(1, "We don't have the correct version of '"+r.Name+"'. Downloading it...")
 	r.mirror()
 	return false
 }

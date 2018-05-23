@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	verbose             = kingpin.Flag("verbose", "Verbose mode.").Short('v').Bool()
+	verbose             = kingpin.Flag("verbose", "Verbose mode.").Short('v').Default("1").Int()
 	logFile             = kingpin.Flag("log-file", "File to write logs to (logs still go to stdout).").Short('l').String()
 	repoURL             = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
 	destinationFolder   = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()
@@ -45,7 +45,7 @@ func main() {
 	if !strings.HasSuffix(*destinationFolder, "/") {
 		*destinationFolder = *destinationFolder + "/"
 	}
-	logIt("Mirroring '" + *repoURL + "' to '" + *destinationFolder + "'.")
+	logIt(0, "Mirroring '"+*repoURL+"' to '"+*destinationFolder+"'.")
 
 	tlsConfig := tls.Config{
 		InsecureSkipVerify: *insecureTLS,
@@ -76,13 +76,13 @@ func main() {
 	data := RepositoryMirror(*repoURL, *destinationFolder)
 
 	if !*metadataOnly {
-		logIt("Downloading packages...")
+		logIt(0, "Downloading packages...")
 		data.MirrorPackages(*sizeCheck, *concurrentDownloads)
 	}
 	if !*dataOnly {
-		logIt("Downloading metadata...")
+		logIt(0, "Downloading metadata...")
 		data.MirrorMetadata(*sizeCheck, *concurrentDownloads)
-		logIt("Downloading repomd.xml...")
+		logIt(0, "Downloading repomd.xml...")
 		data.MirrorRepomd(*sizeCheck, *concurrentDownloads)
 	}
 }
