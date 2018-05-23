@@ -168,13 +168,13 @@ func (r *RepoMetadata) MirrorPackages(sizeCheck bool, concurrent int) {
 	results := 0
 	totalPackages := len(packages)
 	for {
+		if results == totalPackages {
+			break
+		}
 		<-resultChan
 		results++
 		if results%1000 == 0 {
 			logItf("Received packages: %d/%d", results, totalPackages)
-		}
-		if results == totalPackages {
-			break
 		}
 	}
 	logItf("Received: %d/%d", results, totalPackages)
