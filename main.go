@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	verbose             = kingpin.Flag("verbose", "Verbose mode.").Short('v').Default("1").Int()
+	verbose             = kingpin.Flag("verbose", "Verbosity level (0 to silence).").Short('v').Default("1").Int()
 	logFile             = kingpin.Flag("log-file", "File to write logs to (logs still go to stdout).").Short('l').String()
 	repoURL             = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
 	destinationFolder   = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()

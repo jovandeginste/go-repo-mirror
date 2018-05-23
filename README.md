@@ -11,7 +11,7 @@ usage: go-repo-mirror [<flags>] <repo-url> <destination-folder>
 
 Flags:
       --help                     Show context-sensitive help (also try --help-long and --help-man).
-  -v, --verbose                  Verbose mode.
+  -v, --verbose=1                Verbosity level (0 to silence).
   -l, --log-file=LOG-FILE        File to write logs to (logs still go to stdout).
   -m, --metadata-only            Only download repository metadata.
   -d, --data-only                Only download repository data.
@@ -24,7 +24,6 @@ Flags:
 Args:
   <repo-url>            Remote URL to mirror the repository from.
   <destination-folder>  Local folder to mirror the repository to.
-
 ```
 
 This mirrors a remote yum-compatible repository (starting from `$URL/repodata/repomd.xml`) to a local
