@@ -2,16 +2,24 @@ package main
 
 import "log"
 
+var loggers []*log.Logger
+
 func logIt(v ...interface{}) {
 	if *verbose {
-		log.Println(v...)
+		for _, l := range loggers {
+			l.Println(v...)
+		}
 	}
 }
 func logItf(format string, v ...interface{}) {
 	if *verbose {
-		log.Printf(format, v...)
+		for _, l := range loggers {
+			l.Printf(format, v...)
+		}
 	}
 }
 func logItFatal(v ...interface{}) {
-	log.Fatal(v...)
+	for _, l := range loggers {
+		l.Fatal(v...)
+	}
 }

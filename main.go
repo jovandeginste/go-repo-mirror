@@ -2,8 +2,10 @@ package main
 
 import (
 	"crypto/tls"
+	"log"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -12,6 +14,7 @@ import (
 
 var (
 	verbose             = kingpin.Flag("verbose", "Verbose mode.").Short('v').Bool()
+	logFile             = kingpin.Flag("log-file", "File to write logs to (logs still go to stdout).").Short('l').String()
 	repoURL             = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
 	destinationFolder   = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()
 	metadataOnly        = kingpin.Flag("metadata-only", "Only download repository metadata.").Short('m').Bool()
@@ -25,6 +28,17 @@ var (
 
 func main() {
 	kingpin.Parse()
+
+	if *logFile != "" {
+		makeDestination(*logFile)
+		file, err := os.Create(*logFile)
+		if err != nil {
+			panic(err)
+		}
+		loggers = append(loggers, log.New(file, "", log.LstdFlags))
+	}
+	loggers = append(loggers, log.New(os.Stdout, "", log.LstdFlags))
+
 	if !strings.HasSuffix(*repoURL, "/") {
 		*repoURL = *repoURL + "/"
 	}
