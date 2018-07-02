@@ -186,6 +186,8 @@ func checksumForFile(filePath string, csType string) string {
 
 func hashByType(hashType string) hash.Hash {
 	switch hashType {
+	case "sha":
+		return sha1.New()
 	case "sha1":
 		return sha1.New()
 	case "sha256":
