@@ -18,6 +18,8 @@ import (
 	"path"
 	"path/filepath"
 	"time"
+
+	"github.com/ulikunitz/xz"
 )
 
 var client *http.Client
@@ -84,6 +86,11 @@ func unpackURL(url string) []byte {
 		}
 	case ".bz2":
 		content, err = bUnzipData(content)
+		if err != nil {
+			logItFatal(err)
+		}
+	case ".xz":
+		content, err = xUnzipData(content)
 		if err != nil {
 			logItFatal(err)
 		}
@@ -213,4 +220,24 @@ func makeDestination(path string) {
 			logItFatal(err)
 		}
 	}
+}
+
+func xUnzipData(data []byte) (resData []byte, err error) {
+	b := bytes.NewBuffer(data)
+
+	var r io.Reader
+	r, err = xz.NewReader(b)
+	if err != nil {
+		return
+	}
+
+	var resB bytes.Buffer
+	_, err = resB.ReadFrom(r)
+	if err != nil {
+		return
+	}
+
+	resData = resB.Bytes()
+
+	return
 }
