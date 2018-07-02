@@ -34,7 +34,7 @@ type RepoData struct {
 	Type            string       `xml:"type,attr"`
 	Checksum        Checksum     `xml:"checksum"`
 	Location        RepoLocation `xml:"location"`
-	Timestamp       int          `xml:"timestamp"`
+	Timestamp       float64      `xml:"timestamp"`
 	Size            int64        `xml:"size"`
 	OpenChecksum    Checksum     `xml:"open-checksum,omitempty"`
 	OpenSize        int64        `xml:"open-size,omitempty"`
