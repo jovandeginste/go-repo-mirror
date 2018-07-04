@@ -16,8 +16,8 @@ type mirrorAction struct {
 }
 
 // RepositoryMirror initializes a mirror between a remote url and a local folder
-func RepositoryMirror(repoURL string, destination string) *RepoMetadata {
-	repomd := RepoMetadata{Origin: repoURL, Destination: destination}
+func RepositoryMirror(repoURL string, destination string, dataDestination string) *RepoMetadata {
+	repomd := RepoMetadata{Origin: repoURL, Destination: destination, DataDestination: dataDestination}
 	url := repomd.RepomdURL()
 	logIt(1, "Fetching repomd url '"+url+"'")
 	result := getURL(url)

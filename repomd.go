@@ -8,11 +8,12 @@ import (
 
 // RepoMetadata contains the outermost repository metadata
 type RepoMetadata struct {
-	XMLName     xml.Name
-	Origin      string
-	Destination string
-	Revision    string      `xml:"revision"`
-	Data        []*RepoData `xml:"data"`
+	XMLName         xml.Name
+	Origin          string
+	Destination     string
+	DataDestination string
+	Revision        string      `xml:"revision"`
+	Data            []*RepoData `xml:"data"`
 }
 
 // Checksum is a generic struct used in the metadata
@@ -84,14 +85,14 @@ func (r *RepoMetadata) FetchPackages() []*RepoPackage {
 	if err != nil {
 		logItFatal(err)
 	}
-	meta := RepoPackageMeta{Origin: r.Origin, Destination: r.Destination}
+	meta := RepoPackageMeta{Origin: r.Origin, Destination: r.DataDestination}
 	err = xml.Unmarshal(data, &meta)
 	if err != nil {
 		logItFatal(err)
 	}
 	for _, p := range meta.Package {
 		p.Origin = r.Origin
-		p.Destination = r.Destination
+		p.Destination = r.DataDestination
 	}
 	logItf(1, "We have %d packages.", len(meta.Package))
 

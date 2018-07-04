@@ -15,8 +15,6 @@ import (
 var (
 	verbose             = kingpin.Flag("verbose", "Verbosity level (0 to silence).").Short('v').Default("1").Int()
 	logFile             = kingpin.Flag("log-file", "File to write logs to (logs still go to stdout).").Short('l').String()
-	repoURL             = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
-	destinationFolder   = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()
 	metadataOnly        = kingpin.Flag("metadata-only", "Only download repository metadata.").Short('m').Bool()
 	dataOnly            = kingpin.Flag("data-only", "Only download repository data.").Short('d').Bool()
 	concurrentDownloads = kingpin.Flag("concurrent-downloads", "Number of concurrent downloads.").Short('c').Default("10").Int()
@@ -24,6 +22,11 @@ var (
 	certFile            = kingpin.Flag("cert", "Client certificate file (PEM).").String()
 	keyFile             = kingpin.Flag("key", "Client private key file (PEM).").String()
 	insecureTLS         = kingpin.Flag("insecure-tls", "Disable TLS check for server.").Bool()
+	dataPath            = kingpin.Flag("data-path", "Path to store the data(if not inside the destination folder).").String()
+	metadataPath        = kingpin.Flag("metadata-path", "Path to store the metadata(if not inside the destination folder).").String()
+
+	repoURL           = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
+	destinationFolder = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()
 )
 
 func main() {
@@ -42,10 +45,22 @@ func main() {
 	if !strings.HasSuffix(*repoURL, "/") {
 		*repoURL = *repoURL + "/"
 	}
-	if !strings.HasSuffix(*destinationFolder, "/") {
-		*destinationFolder = *destinationFolder + "/"
+
+	if *dataPath == "" {
+		dataPath = destinationFolder
 	}
-	logIt(0, "Mirroring '"+*repoURL+"' to '"+*destinationFolder+"'.")
+	if *metadataPath == "" {
+		metadataPath = destinationFolder
+	}
+
+	if !strings.HasSuffix(*dataPath, "/") {
+		*dataPath = *dataPath + "/"
+	}
+	if !strings.HasSuffix(*metadataPath, "/") {
+		*metadataPath = *metadataPath + "/"
+	}
+	logIt(0, "Mirroring '"+*repoURL+"' data to '"+*dataPath+"'.")
+	logIt(0, "Mirroring '"+*repoURL+"' metadata to '"+*metadataPath+"'.")
 
 	tlsConfig := tls.Config{
 		InsecureSkipVerify: *insecureTLS,
@@ -73,7 +88,7 @@ func main() {
 	}
 
 	SetClient(&c)
-	data := RepositoryMirror(*repoURL, *destinationFolder)
+	data := RepositoryMirror(*repoURL, *metadataPath, *dataPath)
 
 	if !*metadataOnly {
 		logIt(0, "Downloading packages...")

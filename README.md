@@ -20,6 +20,9 @@ Flags:
       --cert=CERT                Client certificate file (PEM).
       --key=KEY                  Client private key file (PEM).
       --insecure-tls             Disable TLS check for server.
+      --data-path=DATA-PATH      Path to store the data(if not inside the destination folder).
+      --metadata-path=METADATA-PATH
+                                 Path to store the metadata(if not inside the destination folder).
 
 Args:
   <repo-url>            Remote URL to mirror the repository from.
@@ -37,5 +40,5 @@ Works for CentOS and RedHat repositories. For RedHat, you need official entitlem
 Example usage:
 
 ```
-go-repo-mirror -v http://mirror.centos.org/centos/7/os/x86_64 /var/repo/centos/7/os/x86_64/
+go-repo-mirror -v2 http://mirror.centos.org/centos/7/os/x86_64 /var/repo/centos/7/os/x86_64/
 ```
