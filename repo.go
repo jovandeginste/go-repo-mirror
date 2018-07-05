@@ -59,7 +59,7 @@ func (r *mirrorAction) mirror() string {
 }
 
 func (r *mirrorAction) verify(sizeCheck bool) bool {
-	if sizeCheck {
+	if sizeCheck && r.Size > 0 {
 		return r.verifySize()
 	}
 	return r.verifyChecksum()
