@@ -39,8 +39,8 @@ func initClient() {
 				KeepAlive: 30 * time.Second,
 			}).Dial,
 			TLSHandshakeTimeout:   10 * time.Second,
-			ResponseHeaderTimeout: 10 * time.Second,
-			ExpectContinueTimeout: 1 * time.Second,
+			ResponseHeaderTimeout: 300 * time.Second,
+			ExpectContinueTimeout: 5 * time.Second,
 		},
 	}
 	SetClient(&c)
@@ -133,6 +133,17 @@ func bUnzipData(data []byte) (resData []byte, err error) {
 	resData = resB.Bytes()
 
 	return
+}
+
+func touchURL(source string) {
+	if !clientInit {
+		initClient()
+	}
+	resp, err := client.Head(source)
+	if err != nil {
+		logItFatal(err)
+	}
+	resp.Body.Close()
 }
 
 func writeURLToFile(source string, destination string) {

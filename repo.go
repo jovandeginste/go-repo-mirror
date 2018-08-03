@@ -42,8 +42,13 @@ func (r *mirrorAction) mirrorCond(sizeCheck bool) bool {
 	return false
 }
 
-func (r *mirrorAction) mirror() string {
+func (r *mirrorAction) mirror() {
 	source := r.Source
+	if *head {
+		touchURL(source)
+		return
+	}
+
 	destination := r.Destination
 
 	tmpDestination := destination + ".part"
@@ -55,10 +60,12 @@ func (r *mirrorAction) mirror() string {
 		log.Fatal("WTF?")
 	}
 	os.Rename(tmpDestination, destination)
-	return destination
 }
 
 func (r *mirrorAction) verify(sizeCheck bool) bool {
+	if *head {
+		return false
+	}
 	if sizeCheck && r.Size > 0 {
 		return r.verifySize()
 	}

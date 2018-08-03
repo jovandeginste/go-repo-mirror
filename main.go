@@ -24,6 +24,7 @@ var (
 	insecureTLS         = kingpin.Flag("insecure-tls", "Disable TLS check for server.").Bool()
 	dataPath            = kingpin.Flag("data-path", "Path to store the data(if not inside the destination folder).").String()
 	metadataPath        = kingpin.Flag("metadata-path", "Path to store the metadata(if not inside the destination folder).").String()
+	head                = kingpin.Flag("head", "Don't fetch the full package but only use a HEAD request.").Bool()
 
 	repoURL           = kingpin.Arg("repo-url", "Remote URL to mirror the repository from.").Required().String()
 	destinationFolder = kingpin.Arg("destination-folder", "Local folder to mirror the repository to.").Required().String()
@@ -81,7 +82,7 @@ func main() {
 				KeepAlive: 30 * time.Second,
 			}).Dial,
 			TLSHandshakeTimeout:   10 * time.Second,
-			ResponseHeaderTimeout: 10 * time.Second,
+			ResponseHeaderTimeout: 300 * time.Second,
 			ExpectContinueTimeout: 1 * time.Second,
 			TLSClientConfig:       &tlsConfig,
 		},
